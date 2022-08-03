@@ -11,12 +11,13 @@ namespace Competition.Pages
 {
     internal class ManageListings
     {
-        //Click on Manage Listings Link
+        //Manage Listings link
         private IWebElement manageListingsLink => driver.FindElement(By.Name("Manage Listings"));
-
-        //View the listing
+        
+        //View button
         private IWebElement view => driver.FindElement(By.XPath("(//i[@class='eye icon'])[1]"));
-        //Delete the listing
+        
+        //Delete button
         private IWebElement delete => driver.FindElement(By.XPath("//table[1]/tbody[1]"));
 
         //Edit the listing
@@ -29,7 +30,6 @@ namespace Competition.Pages
         {
             //Populate the Excel Sheet
             GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "ManageListings");
-
 
         }
     }

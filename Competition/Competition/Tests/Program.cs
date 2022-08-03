@@ -10,19 +10,13 @@ namespace Competition
         class User : Global.Base
         {
             ShareSkill shareSkillObj;
+
             [Test]
-            public void Test1()
+            public void WhenIClickShareSkillAndEnterShareSkill()
             {
-
+                shareSkillObj = new ShareSkill();
+                shareSkillObj.EnterShareSkill();
             }
-
-            //public void WhenIClickShareSkillThenEnterShareSkill(string title, string description, string category, string subCategory, 
-            //    string tags, string serviceType, string locationType, string availableDays, string skillTrade, 
-            //    string skillExchange, string active)
-            //{
-            //    shareSkillObj.EnterShareSkill(title, description, category, subCategory, tags, serviceType,
-            //        locationType, availableDays, skillTrade, skillExchange, active);
-            //}
 
         }
     }

@@ -14,7 +14,6 @@ namespace Competition.Global
     class GlobalDefinitions
     {
         //Initialise the browser
-
         public static IWebDriver driver { get; set; }
 
         #region WaitforElement 
@@ -22,7 +21,6 @@ namespace Competition.Global
         public static void wait(int second)
         {
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(second);
-
         }
         public static IWebElement WaitForElement(IWebDriver driver, By by, int timeOutinSeconds)
         {
@@ -125,7 +123,6 @@ namespace Competition.Global
                             colName = table.Columns[col].ColumnName,
                             colValue = table.Rows[row - 1][col].ToString()
                         };
-
 
                         //Add all the details for each row
                         dataCol.Add(dtTable);

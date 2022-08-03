@@ -17,6 +17,7 @@ namespace Competition.Global
         #region To access Path from resource file
         public static int Browser = 2;
         public static string excelPath = @"D:\workspace\mvpstudio-competition\Competition\Competition\TestLibrary\TestData.xlsx";
+        public static string AutoScriptPath = @"D:\workspace\mvpstudio-competition\Competition\Competition\TestLibrary\UploadScript.exe";
         public static string ScreenshotPath = "";
         public static string ReportPath = "";
         public static string IsLogin = "true";
@@ -47,7 +48,8 @@ namespace Competition.Global
                     break;
             }
 
-            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SignIn");
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.excelPath, "SignIn");
+            
             GlobalDefinitions.driver.Navigate().GoToUrl(ExcelLib.ReadData(2, "Url"));
 
             #region Initialise Reports
@@ -87,7 +89,7 @@ namespace Competition.Global
             //    test.Log(Status.Info, "Image example: " + img);
 
             //    // log with snapshot
-            //    test.Fail("details", MediaEntityBuilder.CreateScreenCaptureFromPath("screenshot.png").Build());
+            //    test.Fail("details", MediaEntityBuilder.CreateScreenCaptureFromPath("screenshot.png").Build());  
 
             //    // test with snapshot
             //    test.AddScreenCaptureFromPath("screenshot.png");
