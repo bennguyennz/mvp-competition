@@ -19,8 +19,7 @@
           "Selenium.Support": "4.3.0",
           "Selenium.WebDriver": "4.3.0",
           "Selenium.WebDriver.ChromeDriver": "103.0.5060.13400",
-          "System.Text.Encoding.CodePages": "6.0.0",
-          "extent": "0.0.3"
+          "System.Text.Encoding.CodePages": "6.0.0"
         },
         "runtime": {
           "Competition.dll": {}
@@ -67,7 +66,6 @@
           }
         }
       },
-      "extent/0.0.3": {},
       "ExtentReports/4.1.0": {
         "dependencies": {
           "Microsoft.AspNetCore": "2.2.0",
@@ -2213,13 +2211,6 @@
       "sha512": "sha512-miW3sWmPXnLM38YadRIfnhL4W4QZajpS6Q/OqsOpFJU5ct8h+M/fMpbGMm5INtsMP0Y1k0WK0stIfSW3RP31Xg==",
       "path": "exceldatareader.dataset/3.6.0",
       "hashPath": "exceldatareader.dataset.3.6.0.nupkg.sha512"
-    },
-    "extent/0.0.3": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-Gr9NbOlbYRCAeCDMacxLfLztAo04BDBMu8rifs3L5cyBc8LSn5UKGG0TRvq6n66r0Yrbjt+lLaqSHBq3LxusEA==",
-      "path": "extent/0.0.3",
-      "hashPath": "extent.0.0.3.nupkg.sha512"
     },
     "ExtentReports/4.1.0": {
       "type": "package",

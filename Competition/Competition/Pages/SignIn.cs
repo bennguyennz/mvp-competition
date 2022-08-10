@@ -36,7 +36,6 @@ namespace Competition.Pages
 
             //Enter email
             Email.SendKeys(ExcelLib.ReadData(2, "Username"));
-            
 
             //Enter password
             //GlobalDefinitions.wait(5);
