@@ -43,9 +43,7 @@ namespace Competition.Pages
             
             //Click Login button
             LoginBtn.Click();
-
-            //GlobalDefinitions.wait(5);
-            Thread.Sleep(3000);
+            GlobalDefinitions.wait(3);
 
         }
     }

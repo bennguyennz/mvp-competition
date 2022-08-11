@@ -120,6 +120,38 @@ namespace Competition.Pages
         private IWebElement actualSkillExchange => driver.FindElement(By.XPath("//div[text()='Skills Trade']//following-sibling::div/span"));
         #endregion
 
+        #region Page Objects for error Messages
+
+        //Title message
+        private IWebElement errorTitle => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[1]/div/div[2]/div/div[2]/div"));
+        
+        //Description message
+        private IWebElement errorDescription => driver.FindElement(By.XPath("//div[@class='tooltip-target ui grid']//div/div[2]/div[2]/div"));
+        
+        //Category message
+        private IWebElement errorCategory => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[3]/div[2]/div[2]"));
+        private IWebElement categoryDisplayText => driver.FindElement(By.Name("categoryID")); 
+        
+        //Subcategory message
+        private IWebElement errorSubcategory => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[3]/div[2]/div/div[2]/div[2]/div"));
+        
+        //Tags message
+        private IWebElement errorTags => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[4]/div[2]/div[2]"));
+
+        //StartDate message
+        private IWebElement errorStartDate1 => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div[2]"));
+
+        //StartDate mesage 2
+        private IWebElement errorStartDate2 => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div[3]"));
+        
+        //Skill-Exchange tag
+        private IWebElement errorSkillExchangeTags => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[8]/div[4]/div[2]"));
+
+        //Message
+        private IWebElement message => driver.FindElement(By.XPath(e_message));
+        private string e_message = "//div[@class='ns-box-inner']";
+
+        #endregion
 
         //Filling Share-Skill details
         public void EnterShareSkill(int rowNumber, string worksheet)
@@ -292,26 +324,6 @@ namespace Competition.Pages
             wait(3);
             //node.Pass("Step 1 is Passed");
         }
-        public void CreateMultipleShareSkill(string worksheet)
-        {
-            //Populate excel file
-            ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
-
-            int rowNumber = 2;
-            string title = ExcelLib.ReadData(rowNumber, "Title");
-            while (title != "null")
-            {
-                EnterShareSkill(rowNumber, worksheet);
-                rowNumber++;
-                title = ExcelLib.ReadData(rowNumber, "Title");                
-            }
-        }
-
-        public void CreateListing_InvalidData(int rowNumber, string worksheet)
-        { 
-            
-        
-        }
 
         //Assertions on ShareSkill
         public void VefiryEnterShareSkill(int rowNumber, string worksheet)
@@ -367,6 +379,8 @@ namespace Competition.Pages
 
             //node.Pass("Step 2 is passed");
         }
+
+        //Clear Data for Editing Listing
         public void ClearData()
         {
             //Clear title
@@ -439,5 +453,158 @@ namespace Competition.Pages
             }
 
         }
+
+        //Negative test case
+        public void EnterShareSkill_InvalidData(int testData, int errorMessage, int outputMessage, string worksheet)
+        {
+            //Populate excel file
+            ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
+            string textSaveButton = ExcelLib.ReadData(testData, "isClickSaveFirst");
+            if (textSaveButton == "Yes")
+            {
+                Save.Click();
+
+                //Check confirmation message
+                WaitForElement(driver, By.XPath(e_message), 3);
+                Assert.That((message.Text).Equals(ExcelLib.ReadData(errorMessage, "isClickSaveFirst")), ExcelLib.ReadData(outputMessage, "isClickSaveFirst"));
+
+                //Check title message
+                Assert.That((errorTitle.Text).Equals(ExcelLib.ReadData(errorMessage, "Title")), ExcelLib.ReadData(outputMessage, "Title"));
+
+                //Check description message
+                Assert.That((errorDescription.Text).Equals(ExcelLib.ReadData(errorMessage, "Description")), ExcelLib.ReadData(outputMessage, "Description"));
+
+                //Check Category message
+                Assert.That((errorCategory.Text).Equals(ExcelLib.ReadData(errorMessage, "Category")), ExcelLib.ReadData(outputMessage, "Category"));
+
+                //Check tags message
+                Assert.That((errorTags.Text).Equals(ExcelLib.ReadData(errorMessage, "Tags")), ExcelLib.ReadData(outputMessage, "Tags"));
+
+                //Check skill exchange tag message
+                Assert.That((errorSkillExchangeTags.Text).Equals(ExcelLib.ReadData(errorMessage, "SkillExchange")), ExcelLib.ReadData(outputMessage, "SkillExchange"));
+
+            }
+            else if (textSaveButton == "No")
+            {
+                //Enter title
+                string titleText = ExcelLib.ReadData(testData, "Title");
+                if (titleText != "Ignore")
+                {
+                    Title.SendKeys(titleText);
+                }
+                //Enter Description
+                string descriptionText = ExcelLib.ReadData(testData, "Description");
+                if (descriptionText != "Ignore")
+                {
+                    Description.SendKeys(descriptionText);
+                }
+
+                //Verify tags
+                string tagsText = ExcelLib.ReadData(testData, "Tags");
+                if (tagsText != "Ignore")
+                {
+                    Tags.Click();
+                    Tags.SendKeys(tagsText);
+                    Tags.SendKeys(Keys.Return);
+
+                }
+
+                //Verify skill exchange tags
+                string textSkillExchangeTag = ExcelLib.ReadData(testData, "SkillExchange");
+                if (textSkillExchangeTag != "Ignore")
+                {
+                    //Select "Skill Trade" options
+                    string expectedSkillTrade = ExcelLib.ReadData(testData, "SkillTradeOption");
+                    string expectedSkillValue = "true";
+
+                    if (expectedSkillTrade.Equals("Credit"))
+                        expectedSkillValue = "false";
+
+                    for (int i = 0; i < radioSkillTrade.Count(); i++)
+                    {
+                        string actualSkillTradeValue = radioSkillTrade[i].GetAttribute("value");
+                        if (expectedSkillValue.Equals(actualSkillTradeValue))
+                        {
+                            //Select "Skill exchange" or "Credit"
+                            radioSkillTrade[i].Click();
+                            wait(1);
+
+                            if (expectedSkillTrade.Equals("Skill-exchange"))
+                            //Enter tags for Skill-exchange
+                            {
+                                SkillExchange.Click();
+                                SkillExchange.SendKeys(ExcelLib.ReadData(testData, "SkillExchange"));
+                                SkillExchange.SendKeys(Keys.Return);
+                            }
+                            else
+                            {
+                                //Enter Credit amount
+                                CreditAmount.SendKeys(ExcelLib.ReadData(testData, "CreditAmount"));
+                            }
+                        }
+                    }
+                }
+
+                //Select category 
+                string categoryText = ExcelLib.ReadData(testData, "Category");
+                var selectCategory = new SelectElement(CategoryDropDown);
+                if (categoryText != "Ignore")
+                {
+                    selectCategory.SelectByText(categoryText);
+                }
+
+                string subCategoryText = ExcelLib.ReadData(testData, "Subcategory");
+                if (subCategoryText == "Ignore")
+                {
+                    //Select Subcategory
+                    var selectSubcategory = new SelectElement(SubCategoryDropDown);
+                    selectSubcategory.SelectByText(ExcelLib.ReadData(testData, "Subcategory"));
+                }
+
+
+
+                Save.Click();
+
+                //Check confirmation message
+                WaitForElement(driver, By.XPath(e_message), 3);
+                Assert.That((message.Text).Equals(ExcelLib.ReadData(errorMessage, "isClickSaveFirst")), ExcelLib.ReadData(outputMessage, "isClickSaveFirst"));
+
+                //Check title
+                Assert.That((errorTitle.Text).Equals(ExcelLib.ReadData(errorMessage, "Title")), ExcelLib.ReadData(outputMessage, "Title"));
+
+                //Check description
+                Assert.That((errorDescription.Text).Equals(ExcelLib.ReadData(errorMessage, "Description")), ExcelLib.ReadData(outputMessage, "Description"));
+
+                if (categoryText == "Ignore")
+                { 
+                    //Check category message
+                    Assert.That((errorCategory.Text).Equals(ExcelLib.ReadData(errorMessage, "Category")), ExcelLib.ReadData(outputMessage, "Category"));
+                } 
+                else
+                //Assert subcategory
+                {
+                    Assert.That((errorSubcategory.Text).Equals(ExcelLib.ReadData(errorMessage, "Subcategory")), ExcelLib.ReadData(outputMessage, "Subcategory"));
+                }
+
+                //Check tags message
+                Assert.That((errorTags.Text).Equals(ExcelLib.ReadData(errorMessage, "Tags")), ExcelLib.ReadData(outputMessage, "Tags"));
+
+                //Check skill exchange tags or credit value
+                if (radioSkillTrade[0].Enabled == true)
+                {
+                    //Check skill exchange tag message
+                    Assert.That((errorSkillExchangeTags.Text).Equals(ExcelLib.ReadData(errorMessage, "SkillExchange")), ExcelLib.ReadData(outputMessage, "SkillExchange"));
+                }
+                else
+                {
+                    //Check credit value
+                    Assert.That(CreditAmount.Text != ExcelLib.ReadData(testData, "CreditAmount"), ExcelLib.ReadData(outputMessage, "CreditAmount"));
+                }
+
+
+            }
+              
+        }
+        
     }
 }

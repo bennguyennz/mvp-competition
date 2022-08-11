@@ -38,15 +38,15 @@ namespace Competition
         {
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
             manageListingsObj = new ManageListings();
-            manageListingsObj.DeleteListing(6, "ManageListings");
-            manageListingsObj.VerifyDelete(6, "ManageListings");
+            manageListingsObj.DeleteListing(7, "ManageListings");
+            manageListingsObj.VerifyDelete(7, "ManageListings");
         }
         [Test, Order(5)]
         public void TC5_WhenIAddInvalidListing()
         {
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
             manageListingsObj = new ManageListings();
-            manageListingsObj.AddListing_Invalid(2, "NegativeTC");
+            manageListingsObj.EnterShareSkill_Invalid(2, 3, 4, "NegativeTC"); //Set (2,3,4) or (6,7,8)
         }
 
         [Test, Order(4)]

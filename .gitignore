@@ -37,8 +37,11 @@ bld/
 #wwwroot/
 
 # directory
-**/TestReports/
-**/Screenshots/
+**/TestLibrary/TestReports/
+**/TestLibrary/Screenshots
+**/.vs/
+**/Competition/bin/
+**/Competition/obj/
 
 # Visual Studio 2017 auto generated files
 Generated\ Files/
