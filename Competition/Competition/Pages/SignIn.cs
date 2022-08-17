@@ -11,8 +11,7 @@ namespace Competition.Pages
 {
     internal class SignIn
     {
-        #region
-        //  Initialize Web Elements 
+        #region Initialize Web Elements
         //Finding the Sign Link
         private IWebElement SignIntab => driver.FindElement(By.XPath("//a[contains(text(),'Sign')]"));
 

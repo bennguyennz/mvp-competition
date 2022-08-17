@@ -22,8 +22,4 @@
     <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TestLibrary\Screenshots\" />
-  </ItemGroup>
-
 </Project>

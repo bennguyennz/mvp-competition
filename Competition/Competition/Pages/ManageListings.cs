@@ -12,63 +12,54 @@ using AventStack.ExtentReports;
 
 namespace Competition.Pages
 {
-    internal class ManageListings
+    internal static class ManageListings
     {
         #region Manage listing's page objects
         //ShareSkill Button
-        private IWebElement btnShareSkill => driver.FindElement(By.LinkText("Share Skill"));
+        private static IWebElement btnShareSkill => driver.FindElement(By.LinkText("Share Skill"));
 
         //Manage Listings
-        private IWebElement manageListingsLink => driver.FindElement(By.XPath("//a[@href='/Home/ListingManagement']"));
+        private static IWebElement manageListingsLink => driver.FindElement(By.XPath("//a[@href='/Home/ListingManagement']"));
 
         //Message warning no listing
-        private IWebElement warningMessage => driver.FindElement(By.XPath("//h3[contains(text(),'You do not have any service listings!')]"));
+        private static IWebElement warningMessage => driver.FindElement(By.XPath("//h3[contains(text(),'You do not have any service listings!')]"));
 
         //Title
-        private IList<IWebElement> Titles => driver.FindElements(By.XPath("//div[@id='listing-management-section']//tbody/tr/td[3]"));
+        private static IList<IWebElement> Titles => driver.FindElements(By.XPath("//div[@id='listing-management-section']//tbody/tr/td[3]"));
 
         //View button
-        private IWebElement view => driver.FindElement(By.XPath("(//i[@class='eye icon'])[1]"));
+        private static IWebElement view => driver.FindElement(By.XPath("(//i[@class='eye icon'])[1]"));
 
         //Edit button
-        private IWebElement edit => driver.FindElement(By.XPath("(//i[@class='outline write icon'])[1]"));
+        private static IWebElement edit => driver.FindElement(By.XPath("(//i[@class='outline write icon'])[1]"));
 
         //Yes/No button
-        private IList <IWebElement> clickActionsButton => driver.FindElements(By.XPath("//div[@class='actions']/button"));
-        
+        private static IList<IWebElement> clickActionsButton => driver.FindElements(By.XPath("//div[@class='actions']/button"));
+
         //Message
-        private IWebElement message => driver.FindElement(By.XPath(e_message));
-        private string e_message = "//div[@class='ns-box-inner']";
+        //private static IWebElement message => driver.FindElement(By.XPath(e_message));
+        //private static string e_message = "//div[@class='ns-box-inner']";
+        //private static string messageContent = "";
 
         //Save button
-        private IWebElement btnSave => driver.FindElement(By.XPath("//input[@value='Save']"));
+        private static IWebElement btnSave => driver.FindElement(By.XPath("//input[@value='Save']"));
         #endregion
 
         //Add a skill
-        public void AddListing(int rowNumber, string worksheet)
+        internal static void AddListing(int rowNumber, string worksheet)
         {
-            ShareSkill shareSkillObj = new ShareSkill();
-            btnShareSkill.Click();
-            wait(1);
-            shareSkillObj.EnterShareSkill(rowNumber,worksheet);
-            wait(2);
-        }
-
-        public void AddInvalidListing(int rowNumber, string worksheet)
-        {
-            ShareSkill shareSkillObj = new ShareSkill();
             btnShareSkill.Click();
             wait(2);
+            ShareSkill.EnterShareSkill(rowNumber, worksheet);
+            wait(3);
         }
 
         //Edit listing
-        public void EditListing(int rowNumber1, int rowNumber2, string worksheet)
-        {
-            ShareSkill shareSkillObj = new ShareSkill();
-           
+        internal static void EditListing(int rowNumber1, int rowNumber2, string worksheet)
+        {  
             //Click on ManageListing
             GoToManageListings();
-
+            wait(2);
             //Populate the Excel Sheet
             ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
 
@@ -79,39 +70,35 @@ namespace Competition.Pages
             string e_Edit = "//div[@id='listing-management-section']//tbody/tr[" + GetTitleIndex(expectedTitle) + "]/td[8]/div/button[2]";
             IWebElement btnEdit = driver.FindElement(By.XPath(e_Edit));
             btnEdit.Click();
-            wait(1);
-
-            shareSkillObj.ClearData();
-            shareSkillObj.EnterShareSkill(rowNumber2,worksheet);
             wait(2);
+
+            ShareSkill.ClearData();
+            ShareSkill.EnterShareSkill(rowNumber2, worksheet);
+            wait(3);
         }
 
         //Verify add & edit
-        public void VerifyListing(int rowNumber, string worksheet)
+        internal static void ViewListing(int rowNumber, string worksheet)
         {
-            ShareSkill ShareSkillObj = new ShareSkill();
 
             //Click on ManageListing
             GoToManageListings();
-
-            //Populate the Excel Sheet
-            ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
+            wait(2);
 
             //Read data
+            ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
             string expectedTitle = ExcelLib.ReadData(rowNumber, "Title");
 
-            //Click on button Edit
+            //Click on button View
             string e_View = "//div[@id='listing-management-section']//tbody/tr[" + GetTitleIndex(expectedTitle) + "]/td[8]/div/button[1]";
             IWebElement btnView = driver.FindElement(By.XPath(e_View));
             btnView.Click();
 
-            //Call verify ShareSkill
-            ShareSkillObj.VefiryEnterShareSkill(rowNumber, worksheet);
             wait(2);
         }
 
         //Delete listing
-        public void DeleteListing(int rowNumber, string worksheet)
+        internal static void DeleteListing(int rowNumber, string worksheet)
         {
             //Click on Manage listing
             GoToManageListings();
@@ -120,8 +107,8 @@ namespace Competition.Pages
             ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
 
             //Read data
-            string expectedTitle = ExcelLib.ReadData(rowNumber, "Title");
             string isDelete = ExcelLib.ReadData(rowNumber, "isDelete");
+            string expectedTitle = ExcelLib.ReadData(rowNumber, "Title");
 
             //Click on button delete
             string strDelete = "//div[@id='listing-management-section']//tbody/tr[" + GetTitleIndex(expectedTitle) + "]/td[8]/div/button[3]";
@@ -134,8 +121,8 @@ namespace Competition.Pages
                 clickActionsButton[1].Click();
 
                 //Verify message
-                WaitForElement(driver, By.XPath(e_message), 3);
-                Assert.AreEqual(message.Text, expectedTitle + " has been deleted");
+                //WaitForElement(driver, By.XPath(e_message), 3);
+                //messageContent = message.Text;
             }
             else
             {
@@ -146,46 +133,49 @@ namespace Competition.Pages
         }
 
         //Verify delete
-        public void VerifyDelete(int row, string worksheet)
+        internal static string FindTitle(string title)
         {
-            ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
-            string title = ExcelLib.ReadData(row, "Title");
-            WaitForElement(driver,By.XPath(e_message),3);
+
+            //Verify delete message
+            //Assert.AreEqual(messageContent, title + " has been deleted");
 
             //Verify if there is no listing
+            string actualTitle = "null";
             int titleCount = Titles.Count();
             if (titleCount.Equals(0))
             {
-                Assert.Pass("No listing found.");
+                return actualTitle;
             }
             else
             {
                 //Verify if title is deleted
                 for (int i = 0; i < titleCount; i++)
                 {
-                    string actualTitle = Titles[i].Text;
-                    Assert.That(actualTitle != title, "Delete Failed. Listing has not been deleted");
+                    actualTitle = Titles[i].Text;
+                    if (title.Equals(actualTitle))
+                        break;
                 }
+                return actualTitle;
             }
             wait(2);
         }
 
-        public void CreateMultipleShareSkill(string worksheet)
+        internal static void CreateMultipleShareSkill(string worksheet)
         {
-            ShareSkill shareSkillObj = new ShareSkill();
             //Populate excel file
             ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
             
+            //Click on button Share Skill
             btnShareSkill.Click();
             wait(1);
 
             int rowNumber = 2;
             string title = ExcelLib.ReadData(rowNumber, "Title");
 
-            //Check if title text is NOT "null" (text)
-            while (title != "Dataset end") 
+            //Check if title text is NOT "End of Dataset" (text)
+            while (title != "End of Dataset") 
             {
-                shareSkillObj.EnterShareSkill(rowNumber, worksheet);
+                ShareSkill.EnterShareSkill(rowNumber, worksheet);
                 
                 rowNumber++;
                 title = ExcelLib.ReadData(rowNumber, "Title");
@@ -193,24 +183,24 @@ namespace Competition.Pages
                 btnShareSkill.Click();
                 wait(2);
             }
-
         }
 
-        public void EnterShareSkill_Invalid(int testData, int errorMessage, int outputMessage, string worksheet)
+        internal static void EnterShareSkill_Invalid(int testData, string worksheet)
         {
-            ShareSkill shareSkillObj = new ShareSkill();
-
             //Populate excel file
-            ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
+            //ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
 
+            //Click on button ShareSkill
             btnShareSkill.Click();
             wait(1);
-            shareSkillObj.EnterShareSkill_InvalidData(testData, errorMessage, outputMessage, "NegativeTC");
 
+            //Enter invalid data
+            ShareSkill.EnterShareSkill_InvalidData(testData, "NegativeTC");
+            Thread.Sleep(2000);
         }
 
         //Functions to check title is existing and return title's position in manage listing
-        public string GetTitleIndex(string expectedTitle)
+        internal static string GetTitleIndex(string expectedTitle)
         {
             //Check if there is no listing's title
             string recordIndex = "";
@@ -224,8 +214,8 @@ namespace Competition.Pages
                 //Find title: Break loop when finding a title. Output: recordIndex
                 for (int i = 0; i < titleCount; i++)
                 {
-                    string title = Titles[i].Text;
-                    if (title.Equals(expectedTitle))
+                    string actualTitle = Titles[i].Text;
+                    if (actualTitle.Equals(expectedTitle))
                     {
                         recordIndex = (i + 1).ToString();
                         break;
@@ -240,30 +230,13 @@ namespace Competition.Pages
             return recordIndex;
         }
 
-
-        //Click on button Save
-        internal void ClickSaveButton()
-        {
-            try
-            {
-                //Click button Save
-                btnSave.Click();
-                wait(1);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail("Button Save is not found.", ex.Message);
-            }
-        }
-
         //Click on manage listing
-        internal void GoToManageListings()
+        internal static void GoToManageListings()
         {
             try
             {
                 //Click Manage Listing
                 manageListingsLink.Click();
-                wait(1);
             }
             catch (Exception ex)
             {

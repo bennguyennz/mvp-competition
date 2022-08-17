@@ -26,6 +26,7 @@ namespace Competition.Global
         public static string AutoScriptPath = @"D:\workspace\mvpstudio-competition\Competition\Competition\TestLibrary\TestData\UploadScript.exe";
         public static string ScreenshotPath = @"D:\workspace\mvpstudio-competition\Competition\Competition\TestLibrary\Screenshots\";
         public static string ReportPath = @"D:\workspace\mvpstudio-competition\Competition\Competition\TestLibrary\Reports\";
+        public static int rowNumber = 2;
         #endregion
 
         public static string ExcelPath { get => excelPath; set => excelPath = value; }
@@ -33,6 +34,7 @@ namespace Competition.Global
         #region reports
         public static AventStack.ExtentReports.ExtentReports extent;
         public static AventStack.ExtentReports.ExtentTest test;
+
         #endregion
 
         #region setup and tear down
