@@ -13,8 +13,7 @@ namespace Competition.Global
 {
     class GlobalDefinitions
     {
-        //Initialise the browser
-
+        //Initialise driver
         public static IWebDriver driver { get; set; }
 
         #region WaitforElement 
@@ -22,12 +21,11 @@ namespace Competition.Global
         public static void wait(int second)
         {
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(second);
-
         }
-        public static IWebElement WaitForElement(IWebDriver driver, By by, int timeOutinSeconds)
+        public static IWebElement WaitForElement(IWebDriver driver, By ByAndlocator, int timeOutinSeconds)
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeOutinSeconds));
-            return (wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(by)));
+            return (wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(ByAndlocator)));
         }
         #endregion
 
@@ -43,7 +41,7 @@ namespace Competition.Global
                 public string colValue { get; set; }
             }
 
-
+ 
             public static void ClearData()
             {
                 dataCol.Clear();
@@ -76,8 +74,6 @@ namespace Competition.Global
                         // store it in data table
                         DataTable resultTable = table[SheetName];
 
-                        //excelReader.Dispose();
-                        //excelReader.Close();
                         // return
                         return resultTable;
                     }
@@ -88,7 +84,7 @@ namespace Competition.Global
             {
                 try
                 {
-                    //Retriving Data using LINQ to reduce much of iterations
+                    //Retrieving Data using LINQ to reduce much of iterations
 
                     rowNumber = rowNumber - 1;
                     string data = (from colData in dataCol
@@ -126,7 +122,6 @@ namespace Competition.Global
                             colValue = table.Rows[row - 1][col].ToString()
                         };
 
-
                         //Add all the details for each row
                         dataCol.Add(dtTable);
 
@@ -139,29 +134,32 @@ namespace Competition.Global
         #endregion
 
         #region screenshots
-        public class SaveScreenShotClass
+        public class Screenshot
         {
-            public static string SaveScreenshot(IWebDriver driver, string ScreenShotFileName) // Definition
+            public static string SaveScreenshot(IWebDriver driver, string ScreenShotFileName)
             {
-                var folderLocation = (Base.ScreenshotPath);
-
-                if (!System.IO.Directory.Exists(folderLocation))
+                if (!System.IO.Directory.Exists(Base.ScreenshotPath))
                 {
-                    System.IO.Directory.CreateDirectory(folderLocation);
+                    System.IO.Directory.CreateDirectory(Base.ScreenshotPath);
                 }
 
-                var screenShot = ((ITakesScreenshot)driver).GetScreenshot();
-                var fileName = new StringBuilder(folderLocation);
-
-                fileName.Append(ScreenShotFileName);
-                fileName.Append(DateTime.Now.ToString("_dd-mm-yyyy_mss"));
-                //fileName.Append(DateTime.Now.ToString("dd-mm-yyyym_ss"));
-                fileName.Append(".jpeg");
+                var screenShot = ((ITakesScreenshot)GlobalDefinitions.driver).GetScreenshot();
+                var fileName = new StringBuilder(Base.ScreenshotPath + ScreenShotFileName + DateTime.Now.ToString("_dd-MM-yyyy_HHmm") + ".jpeg");
                 screenShot.SaveAsFile(fileName.ToString(), ScreenshotImageFormat.Jpeg);
                 return fileName.ToString();
             }
+
+            public static string GetScreenshot()
+            {
+                return ((ITakesScreenshot)GlobalDefinitions.driver).GetScreenshot().AsBase64EncodedString;
+            }
+
         }
+        
+
         #endregion
+
+       
     }
 }
 

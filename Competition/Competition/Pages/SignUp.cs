@@ -13,51 +13,52 @@ namespace Competition.Pages
     {
         #region  Initialize Web Elements 
         //Finding the Join 
-        private IWebElement Join => driver.FindElement(By.XPath("//*[@id='home']/div/div/div[1]/div/button"));
+        private IWebElement Join => driver.FindElement(By.XPath("//button[@class='ui green basic button']"));
 
         //Identify FirstName Textbox
-        private IWebElement FirstName => driver.FindElement(By.XPath("/html/body/div[2]/div/div/div/form/div[1]/input"));
+        private IWebElement FirstName => driver.FindElement(By.Name("firstName"));
 
         //Identify LastName Textbox
-        private IWebElement LastName => driver.FindElement(By.XPath("/html/body/div[2]/div/div/div/form/div[2]/input"));
+        private IWebElement LastName => driver.FindElement(By.Name("lastName"));
 
         //Identify Email Textbox
-        private IWebElement Email => driver.FindElement(By.XPath("/html/body/div[2]/div/div/div/form/div[3]/input"));
+        private IWebElement Email => driver.FindElement(By.Name("email"));
 
         //Identify Password Textbox
-        private IWebElement Password => driver.FindElement(By.XPath("/html/body/div[2]/div/div/div/form/div[4]/input"));
+        private IWebElement Password => driver.FindElement(By.XPath("//input[@name='password']"));
 
         //Identify Confirm Password Textbox
-        private IWebElement ConfirmPassword => driver.FindElement(By.XPath("/html/body/div[2]/div/div/div/form/div[5]/input"));
+        private IWebElement ConfirmPassword => driver.FindElement(By.XPath("//input[@name='confirmPassword']"));
 
         //Identify Term and Conditions Checkbox
-        private IWebElement Checkbox => driver.FindElement(By.XPath("/html/body/div[2]/div/div/div/form/div[6]/div/div/input"));
+        private IWebElement Checkbox => driver.FindElement(By.XPath("//input[@type='checkbox']"));
 
         //Identify join button
-        private IWebElement JoinBtn => driver.FindElement(By.XPath("//*[@id='submit-btn']"));
+        private IWebElement JoinBtn => driver.FindElement(By.Id("submit-btn"));
         #endregion
 
         internal void Register()
         {
             //Populate the excel data
-            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SignUp");
+            ExcelLib.PopulateInCollection(Base.ExcelPath, "SignUp");
+
             //Click on Join button
             Join.Click();
 
             //Enter FirstName
-            FirstName.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "FirstName"));
+            FirstName.SendKeys(ExcelLib.ReadData(2, "FirstName"));
 
             //Enter LastName
-            LastName.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "LastName"));
+            LastName.SendKeys(ExcelLib.ReadData(2, "LastName"));
 
             //Enter Email
-            Email.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Email"));
+            Email.SendKeys(ExcelLib.ReadData(2, "Email"));
 
             //Enter Password
-            Password.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Password"));
+            Password.SendKeys(ExcelLib.ReadData(2, "Password"));
 
             //Enter Password again to confirm
-            ConfirmPassword.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "ConfirmPswd"));
+            ConfirmPassword.SendKeys(ExcelLib.ReadData(2, "ConfirmPswd"));
 
             //Click on Checkbox
             Checkbox.Click();

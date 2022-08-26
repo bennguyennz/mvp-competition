@@ -47,9 +47,6 @@
           "lib/netstandard2.0/ExcelDataReader.DataSet.dll": {}
         }
       },
-      "extent/0.0.3": {
-        "type": "package"
-      },
       "ExtentReports/4.1.0": {
         "type": "package",
         "dependencies": {
@@ -3354,19 +3351,6 @@
         "lib/netstandard2.0/ExcelDataReader.DataSet.dll",
         "lib/netstandard2.0/ExcelDataReader.DataSet.pdb",
         "lib/netstandard2.0/ExcelDataReader.DataSet.xml"
-      ]
-    },
-    "extent/0.0.3": {
-      "sha512": "Gr9NbOlbYRCAeCDMacxLfLztAo04BDBMu8rifs3L5cyBc8LSn5UKGG0TRvq6n66r0Yrbjt+lLaqSHBq3LxusEA==",
-      "type": "package",
-      "path": "extent/0.0.3",
-      "hasTools": true,
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "extent.0.0.3.nupkg.sha512",
-        "extent.nuspec",
-        "tools/extent.exe"
       ]
     },
     "ExtentReports/4.1.0": {
@@ -10182,8 +10166,7 @@
       "Selenium.Support >= 4.3.0",
       "Selenium.WebDriver >= 4.3.0",
       "Selenium.WebDriver.ChromeDriver >= 103.0.5060.13400",
-      "System.Text.Encoding.CodePages >= 6.0.0",
-      "extent >= 0.0.3"
+      "System.Text.Encoding.CodePages >= 6.0.0"
     ]
   },
   "packageFolders": {
@@ -10272,10 +10255,6 @@
           "System.Text.Encoding.CodePages": {
             "target": "Package",
             "version": "[6.0.0, )"
-          },
-          "extent": {
-            "target": "Package",
-            "version": "[0.0.3, )"
           }
         },
         "imports": [

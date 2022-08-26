@@ -87,10 +87,6 @@
             "System.Text.Encoding.CodePages": {
               "target": "Package",
               "version": "[6.0.0, )"
-            },
-            "extent": {
-              "target": "Package",
-              "version": "[0.0.3, )"
             }
           },
           "imports": [

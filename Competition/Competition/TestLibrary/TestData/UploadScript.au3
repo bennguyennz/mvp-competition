@@ -1,0 +1,5 @@
+ControlFocus("Open","","Edit1")
+Sleep(1000)
+ControlSetText("Open","","Edit1","D:\workspace\mvpstudio-competition\Competition\Competition\TestLibrary\TestData\Template.docx")
+Sleep(1000)
+ControlClick("Open","","Button1")

@@ -11,8 +11,7 @@ namespace Competition.Pages
 {
     internal class SignIn
     {
-        #region
-        //  Initialize Web Elements 
+        #region Initialize Web Elements
         //Finding the Sign Link
         private IWebElement SignIntab => driver.FindElement(By.XPath("//a[contains(text(),'Sign')]"));
 
@@ -28,16 +27,21 @@ namespace Competition.Pages
 
         public void LoginSteps()
         {
-            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SignIn");
+            //Populate excel data
+            ExcelLib.PopulateInCollection(Base.ExcelPath, "SignIn");
 
+            //Click on Signin button
             SignIntab.Click();
-            Email.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Username"));
+
+            //Enter email
+            Email.SendKeys(ExcelLib.ReadData(2, "Username"));
+
+            //Enter password
+            Password.SendKeys(ExcelLib.ReadData(2, "Password"));
             
-            //GlobalDefinitions.wait(5);
-            Password.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Password"));
+            //Click Login button
             LoginBtn.Click();
-            //GlobalDefinitions.wait(5);
-            Thread.Sleep(3000);
+            wait(3);
 
         }
     }

@@ -8,14 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="TestLibrary\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
     <PackageReference Include="ExcelDataReader" Version="3.6.0" />
     <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
-    <PackageReference Include="extent" Version="0.0.3" />
     <PackageReference Include="ExtentReports" Version="4.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
     <PackageReference Include="Microsoft.NETCore.App" Version="2.2.8" />
