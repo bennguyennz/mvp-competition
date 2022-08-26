@@ -37,12 +37,11 @@ namespace Competition.Pages
             Email.SendKeys(ExcelLib.ReadData(2, "Username"));
 
             //Enter password
-            //GlobalDefinitions.wait(5);
             Password.SendKeys(ExcelLib.ReadData(2, "Password"));
             
             //Click Login button
             LoginBtn.Click();
-            GlobalDefinitions.wait(3);
+            wait(3);
 
         }
     }

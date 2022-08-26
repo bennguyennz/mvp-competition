@@ -12,16 +12,21 @@ namespace Competition
     //[Category("Sprint1")]
     internal class Tests: Global.Base
     {
+        ManageListings manageListingObj;
+        ShareSkill shareSkillObj;
         [Test, Order(1)]
         public void TC1a_WhenIEnterListing()
         {
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
-            ManageListings.AddListing(2, "ManageListings");
+            ManageListings manageListingObj = new ManageListings();
+            manageListingObj.AddListing(2, "ManageListings");
+           
         }
         [Test, Order(2)]
         public void TC1b_ThenListingIsCreated()
         {
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
+            manageListingObj = new ManageListings();
             VerifyListingDetails(2, "ManageListings");
         }
 
@@ -29,7 +34,8 @@ namespace Competition
         public void TC2a_WhenIEditListing()
         {
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
-            ManageListings.EditListing(2, 3, "ManageListings");
+            manageListingObj = new ManageListings();
+            manageListingObj.EditListing(2, 3, "ManageListings");
         }
 
         [Test, Order(4)]
@@ -43,7 +49,8 @@ namespace Competition
         public void TC3a_WhenIDeleteListing()
         {
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
-            ManageListings.DeleteListing(3, "ManageListings");
+            manageListingObj = new ManageListings();
+            manageListingObj.DeleteListing(3, "ManageListings");
         }
 
         [Test, Order(6)]
@@ -57,21 +64,24 @@ namespace Competition
         public void TC4a_WhenIEnterNoDataThenIAssert()
         {
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
-            ManageListings.EnterShareSkill_Invalid(2, "NegativeTC");
+            manageListingObj = new ManageListings();
+            manageListingObj.EnterShareSkill_Invalid(2, "NegativeTC");
             AssertNoData(3,4, "NegativeTC");//No need test data
         }
         [Test, Order(8)]
         public void TC4b_WhenIAddInvalidDataThenIAssert()
         {
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
-            ManageListings.EnterShareSkill_Invalid(6, "NegativeTC"); //test data, esp. past start date
+            manageListingObj = new ManageListings();
+            manageListingObj.EnterShareSkill_Invalid(6, "NegativeTC"); //test data, esp. past start date
             AssertInvalidData(6, 7, 8, "NegativeTC"); //need test data
         }
         [Test, Order(9)]
         public void TC4c_WhenIAddInvalidDataThenIAssert()
         {
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
-            ManageListings.EnterShareSkill_Invalid(10, "NegativeTC");//Test data, esp. past startdate, startdate>enddate
+            manageListingObj = new ManageListings();
+            manageListingObj.EnterShareSkill_Invalid(10, "NegativeTC");//Test data, esp. past startdate, startdate>enddate
             AssertInvalidData(10, 11, 12, "NegativeTC"); //need test data
         }
 
@@ -79,21 +89,28 @@ namespace Competition
         public void TC5_CreateMultipleListing()
         {
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
-            ManageListings.CreateMultipleShareSkill("ShareSkill");
+            manageListingObj = new ManageListings();
+            manageListingObj.CreateMultipleShareSkill("ShareSkill");
         }
 
         public void VerifyListingDetails(int rowNumber, string worksheet)
         {
             //Click on view Listing
-            ManageListings.ViewListing(rowNumber, worksheet);
+            manageListingObj = new ManageListings();
+            shareSkillObj = new ShareSkill();
+            manageListingObj.ViewListing(rowNumber, worksheet);
+
+            Listing excel = new Listing();
+            Listing web = new Listing();
+
+
+            shareSkillObj.GetExcel(rowNumber, worksheet, out excel);
+
+            shareSkillObj.GetWeb(out web);
 
             //Assertions
             Assert.Multiple(() =>
             {
-                Listing excel = new Listing();
-                Listing web = new Listing();
-                ShareSkill.GetExcel(rowNumber, worksheet, out excel);
-                ShareSkill.GetWeb(out web);
 
                 //Verify expected Title vs actual Title
                 Assert.AreEqual(excel.title, web.title);
@@ -129,39 +146,41 @@ namespace Competition
 
                 //Verify Skills Trade
                 if (excel.skillTrade == "Credit")
-                    Assert.AreEqual("None Specified", GetSkillTrade("Credit"));
+                    Assert.AreEqual("None Specified", shareSkillObj.GetSkillTrade("Credit"));
                 else
-                    Assert.AreEqual(excel.skillExchange, GetSkillTrade("Skill-exchange"));
+                    Assert.AreEqual(excel.skillExchange, shareSkillObj.GetSkillTrade("Skill-exchange"));
             });
 
         }
 
         public void VerifyDelete(int rowNumber, string worksheet)
         {
+            manageListingObj = new ManageListings();
             //Populate excel data
             ExcelLib.PopulateInCollection(ExcelPath, worksheet);
             string title = ExcelLib.ReadData(rowNumber, "Title");
-            
+
             //Click on Manage Listing
-            ManageListings.GoToManageListings();
+            manageListingObj.GoToManageListings();
 
             //Assertion
-            Assert.AreNotEqual(title, ManageListings.FindTitle(title),"Delete Failed");
+            Assert.AreNotEqual(title, manageListingObj.FindTitle(title),"Delete Failed");
         }
 
         public void AssertNoData(int excelMessage, int seleniumMessage, string worksheet)
         {
+            shareSkillObj = new ShareSkill();
             Listing xMessage = new Listing();
             Listing selenium = new Listing();
             Listing portal = new Listing();
-            ShareSkill.GetExcel(excelMessage, worksheet, out xMessage);
-            ShareSkill.GetExcel(seleniumMessage, worksheet, out selenium);
-            ShareSkill.GetPortalMessage(out portal);
+            shareSkillObj.GetExcel(excelMessage, worksheet, out xMessage);
+            shareSkillObj.GetExcel(seleniumMessage, worksheet, out selenium);
+            shareSkillObj.GetPortalMessage(out portal);
 
             //Assertions
             Assert.Multiple(() =>
             {
-                Assert.That(GetMessage().Equals(xMessage.isClickSaveFirst), selenium.isClickSaveFirst);
+                Assert.That(shareSkillObj.GetMessage().Equals(xMessage.isClickSaveFirst), selenium.isClickSaveFirst);
 
                 //Check title message
                 Assert.That((portal.title).Equals(xMessage.title), selenium.title);
@@ -170,32 +189,33 @@ namespace Competition
                 Assert.That((portal.description).Equals(xMessage.description), selenium.description);
 
                 //Check Category message
-                Assert.That(GetCategoryError().Equals(xMessage.category), selenium.category);
+                Assert.That(shareSkillObj.GetCategoryError().Equals(xMessage.category), selenium.category);
 
                 //Check tags message
                 Assert.That((portal.tags).Equals(xMessage.tags), selenium.tags);
 
                 //Check skill exchange tag message
-                Assert.That(GetSkillExchangeError().Equals(xMessage.skillExchange), selenium.skillExchange);
+                Assert.That(shareSkillObj.GetSkillExchangeError().Equals(xMessage.skillExchange), selenium.skillExchange);
             });
         }
 
         public void AssertInvalidData(int testdata, int excelMessage, int seleniumMessage, string worksheet)
         {
+            shareSkillObj = new ShareSkill();
             Listing test = new Listing();
             Listing xMessage = new Listing();
             Listing selenium = new Listing();
             Listing portal = new Listing();
-            ShareSkill.GetExcel(testdata, worksheet, out test);
-            ShareSkill.GetExcel(excelMessage, worksheet, out xMessage);
-            ShareSkill.GetExcel(seleniumMessage, worksheet, out selenium);
-            ShareSkill.GetPortalMessage(out portal);
+            shareSkillObj.GetExcel(testdata, worksheet, out test);
+            shareSkillObj.GetExcel(excelMessage, worksheet, out xMessage);
+            shareSkillObj.GetExcel(seleniumMessage, worksheet, out selenium);
+            shareSkillObj.GetPortalMessage(out portal);
 
             //Assertions
             Assert.Multiple(() =>
             {
                 //Check confirmation message
-                Assert.That(GetMessage().Equals(xMessage.isClickSaveFirst), selenium.isClickSaveFirst);
+                Assert.That(shareSkillObj.GetMessage().Equals(xMessage.isClickSaveFirst), selenium.isClickSaveFirst);
 
                 //Check title
                 Assert.That((portal.title).Equals(xMessage.title), selenium.title);
@@ -206,12 +226,12 @@ namespace Competition
                 if (test.category == "Ignore")
                 {
                     //Check category message
-                    Assert.That(GetCategoryError().Equals(xMessage.category), selenium.category);
+                    Assert.That(shareSkillObj.GetCategoryError().Equals(xMessage.category), selenium.category);
                 }
                 else
                 //Assert subcategory
                 {
-                    Assert.That(GetSubcategoryError().Equals(xMessage.subcategory), selenium.subcategory);
+                    Assert.That(shareSkillObj.GetSubcategoryError().Equals(xMessage.subcategory), selenium.subcategory);
                 }
 
                 //Check tags message
@@ -220,18 +240,18 @@ namespace Competition
                 //Check date message
                 if ((test.startDate != "Ignore") & (test.endDate != "Ignore")) //and startdate < today
                 {
-                    Assert.That(ShareSkill.GetDateErrorMessage1().Equals(xMessage.startDate), selenium.startDate);
-                    Assert.That(GetDateErrorMessage2().Equals(xMessage.endDate), selenium.endDate);
+                    Assert.That(shareSkillObj.GetDateErrorMessage1().Equals(xMessage.startDate), selenium.startDate);
+                    Assert.That(shareSkillObj.GetDateErrorMessage2().Equals(xMessage.endDate), selenium.endDate);
                 }
                 else
                 {
                     if (test.startDate != "Ignore") //and startDate < today
                     {
-                        Assert.That(GetDateErrorMessage2().Equals(xMessage.startDate), selenium.startDate);
+                        Assert.That(shareSkillObj.GetDateErrorMessage2().Equals(xMessage.startDate), selenium.startDate);
                     }
                     if (test.endDate != "Ignore") //and start < enddate
                     {
-                        Assert.That(GetDateErrorMessage2().Equals(xMessage.endDate), selenium.endDate);
+                        Assert.That(shareSkillObj.GetDateErrorMessage2().Equals(xMessage.endDate), selenium.endDate);
                     }
                 }
 
@@ -239,17 +259,17 @@ namespace Competition
                 if (test.skillTrade.Equals("Skill-exchange"))
                 {
                     //Check skill exchange tag message
-                    Assert.That(GetSkillExchangeError().Equals(xMessage.skillExchange), selenium.skillExchange);
+                    Assert.That(shareSkillObj.GetSkillExchangeError().Equals(xMessage.skillExchange), selenium.skillExchange);
                 }
                 else if (test.skillTrade.Equals("Credit"))
                 {
                     //Check credit value
-                    Assert.That(GetCredit() != test.credit, selenium.credit);
+                    Assert.That(shareSkillObj.GetCredit() != test.credit, selenium.credit);
                 }
                 else
                 {     
                     //Check skill exchange tag message
-                    Assert.That(GetSkillExchangeError().Equals(xMessage.skillExchange), selenium.skillExchange);
+                    Assert.That(shareSkillObj.GetSkillExchangeError().Equals(xMessage.skillExchange), selenium.skillExchange);
                 }
             });
         }

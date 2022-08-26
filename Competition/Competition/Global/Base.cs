@@ -26,7 +26,6 @@ namespace Competition.Global
         public static string AutoScriptPath = @"D:\workspace\mvpstudio-competition\Competition\Competition\TestLibrary\TestData\UploadScript.exe";
         public static string ScreenshotPath = @"D:\workspace\mvpstudio-competition\Competition\Competition\TestLibrary\Screenshots\";
         public static string ReportPath = @"D:\workspace\mvpstudio-competition\Competition\Competition\TestLibrary\Reports\";
-        public static int rowNumber = 2;
         #endregion
 
         public static string ExcelPath { get => excelPath; set => excelPath = value; }
@@ -64,19 +63,19 @@ namespace Competition.Global
             {
 
                 case 1:
-                    GlobalDefinitions.driver = new FirefoxDriver();
+                    driver = new FirefoxDriver();
                     break;
                 case 2:
-                    GlobalDefinitions.driver = new ChromeDriver();
-                    GlobalDefinitions.driver.Manage().Window.Maximize();
+                    driver = new ChromeDriver();
+                    driver.Manage().Window.Maximize();
                     break;
             }
 
             //Load excel into collection
-            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.excelPath, "SignIn");
+            ExcelLib.PopulateInCollection(Base.excelPath, "SignIn");
 
             //Open URL
-            GlobalDefinitions.driver.Navigate().GoToUrl(ExcelLib.ReadData(2, "Url"));
+            driver.Navigate().GoToUrl(ExcelLib.ReadData(2, "Url"));
 
             if (IsLogin == "true")
             {
@@ -138,8 +137,8 @@ namespace Competition.Global
             }
            
             // Close the driver            
-            GlobalDefinitions.driver.Close();
-            GlobalDefinitions.driver.Quit();
+            driver.Close();
+            driver.Quit();
         }
 
         [OneTimeTearDown]

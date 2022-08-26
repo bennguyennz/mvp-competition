@@ -18,142 +18,141 @@ namespace Competition.Pages
     {
         #region Page Objects for EnterShareSkill
         //Title textbox
-        private static IWebElement Title => driver.FindElement(By.Name("title"));
+        private IWebElement Title => driver.FindElement(By.Name("title"));
 
         //Description textbox
-        private static IWebElement Description => driver.FindElement(By.Name("description"));
+        private IWebElement Description => driver.FindElement(By.Name("description"));
 
         //Category Dropdown
-        private static IWebElement CategoryDropDown => driver.FindElement(By.Name("categoryId"));
+        private IWebElement CategoryDropDown => driver.FindElement(By.Name("categoryId"));
 
         //SubCategory Dropdown
-        private static IWebElement SubCategoryDropDown => driver.FindElement(By.Name("subcategoryId"));
+        private IWebElement SubCategoryDropDown => driver.FindElement(By.Name("subcategoryId"));
 
         //Tag names textbox
-        private static IWebElement Tags => driver.FindElement(By.XPath("//form[@class='ui form']/div[4]/div[2]/div/div/div/div/input"));
+        private IWebElement Tags => driver.FindElement(By.XPath("//form[@class='ui form']/div[4]/div[2]/div/div/div/div/input"));
 
         //Entered displayed Tags
-        private static IList<IWebElement> displayedTags => driver.FindElements(By.XPath("//form[@class='ui form']/div[4]/div[2]/div/div/div/span/a"));
+        private IList<IWebElement> displayedTags => driver.FindElements(By.XPath("//form[@class='ui form']/div[4]/div[2]/div/div/div/span/a"));
         //form[@class='ui form']/div[4]/div[2]/div/div/div/span/a
 
         //Service type radio button
-        private static IList<IWebElement> radioServiceType => driver.FindElements(By.Name("serviceType"));
+        private IList<IWebElement> radioServiceType => driver.FindElements(By.Name("serviceType"));
 
         //Location Type radio button
-        private static IList<IWebElement> radioLocationType => driver.FindElements(By.Name("locationType"));
+        private IList<IWebElement> radioLocationType => driver.FindElements(By.Name("locationType"));
 
         //Start Date dropdown
-        private static IWebElement StartDateDropDown => driver.FindElement(By.Name("startDate"));
+        private IWebElement StartDateDropDown => driver.FindElement(By.Name("startDate"));
 
         //End Date dropdown
-        private static IWebElement EndDateDropDown => driver.FindElement(By.Name("endDate"));
+        private IWebElement EndDateDropDown => driver.FindElement(By.Name("endDate"));
 
         //Available days
-        private static IList<IWebElement> Days => driver.FindElements(By.XPath("//input[@name='Available']"));
+        private IList<IWebElement> Days => driver.FindElements(By.XPath("//input[@name='Available']"));
 
         //Starttime
-        private static IList<IWebElement> StartTime => driver.FindElements(By.Name("StartTime"));
+        private IList<IWebElement> StartTime => driver.FindElements(By.Name("StartTime"));
 
         //EndTime
-        private static IList<IWebElement> EndTime => driver.FindElements(By.Name("EndTime"));
+        private IList<IWebElement> EndTime => driver.FindElements(By.Name("EndTime"));
 
 
         //StartTime dropdown
-        private static IWebElement StartTimeDropDown => driver.FindElement(By.XPath("//div[3]/div[2]/input[1]"));
+        private IWebElement StartTimeDropDown => driver.FindElement(By.XPath("//div[3]/div[2]/input[1]"));
 
         //EndTime dropdown
-        private static IWebElement EndTimeDropDown => driver.FindElement(By.XPath("//div[3]/div[3]/input[1]"));
+        private IWebElement EndTimeDropDown => driver.FindElement(By.XPath("//div[3]/div[3]/input[1]"));
 
         //Skill Trade option
-        private static IList<IWebElement> radioSkillTrade => driver.FindElements(By.Name("skillTrades"));
+        private IList<IWebElement> radioSkillTrade => driver.FindElements(By.Name("skillTrades"));
 
         //Skill Exchange
-        private static IWebElement SkillExchange => driver.FindElement(By.XPath("//div[@class='form-wrapper']//input[@type='text']"));
-        private static IList<IWebElement> skillExchangeTags => driver.FindElements(By.XPath("//form[@class='ui form']/div[8]/div[4]/div/div/div/div/span/a"));
+        private IWebElement SkillExchange => driver.FindElement(By.XPath("//div[@class='form-wrapper']//input[@type='text']"));
+        private IList<IWebElement> skillExchangeTags => driver.FindElements(By.XPath("//form[@class='ui form']/div[8]/div[4]/div/div/div/div/span/a"));
 
 
         //Credit textbox
-        private static IWebElement CreditAmount => driver.FindElement(By.XPath("//input[@placeholder='Amount']"));
+        private IWebElement CreditAmount => driver.FindElement(By.XPath("//input[@placeholder='Amount']"));
 
         //Work Samples button
-        private static IWebElement btnWorkSamples => driver.FindElement(By.XPath("//i[@class='huge plus circle icon padding-25']"));
+        private IWebElement btnWorkSamples => driver.FindElement(By.XPath("//i[@class='huge plus circle icon padding-25']"));
 
         //Active option
-        private static IList<IWebElement> radioActive => driver.FindElements(By.XPath("//input[@name='isActive']"));
+        private IList<IWebElement> radioActive => driver.FindElements(By.XPath("//input[@name='isActive']"));
 
         //Save button
-        private static IWebElement Save => driver.FindElement(By.XPath("//input[@value='Save']"));
+        private IWebElement Save => driver.FindElement(By.XPath("//input[@value='Save']"));
         #endregion
 
-        #region Page Objects for VarifyShareSkill
+        #region Page Objects for VerifyShareSkill
         //Title
-        private static IWebElement actualTitle => driver.FindElement(By.XPath("//span[@class='skill-title']"));
+        private IWebElement actualTitle => driver.FindElement(By.XPath("//span[@class='skill-title']"));
 
         //Description
-        private static IWebElement actualDescription => driver.FindElement(By.XPath("//div[text()='Description']//following-sibling::div"));
+        private IWebElement actualDescription => driver.FindElement(By.XPath("//div[text()='Description']//following-sibling::div"));
 
         //Category
-        private static IWebElement actualCategory => driver.FindElement(By.XPath("//div[text()='Category']//following-sibling::div"));
+        private IWebElement actualCategory => driver.FindElement(By.XPath("//div[text()='Category']//following-sibling::div"));
 
         //Subcategory
-        private static IWebElement actualSubcategory => driver.FindElement(By.XPath("//div[text()='Subcategory']//following-sibling::div"));
+        private IWebElement actualSubcategory => driver.FindElement(By.XPath("//div[text()='Subcategory']//following-sibling::div"));
 
         //Service Type
-        private static IWebElement actualServiceType => driver.FindElement(By.XPath("//div[text()='Service Type']//following-sibling::div"));
+        private IWebElement actualServiceType => driver.FindElement(By.XPath("//div[text()='Service Type']//following-sibling::div"));
 
         //Start Date
-        private static IWebElement actualStartDate => driver.FindElement(By.XPath("//div[text()='Start Date']//following-sibling::div"));
+        private IWebElement actualStartDate => driver.FindElement(By.XPath("//div[text()='Start Date']//following-sibling::div"));
 
         //End Date
-        private static IWebElement actualEndDate => driver.FindElement(By.XPath("//div[text()='End Date']//following-sibling::div"));
+        private IWebElement actualEndDate => driver.FindElement(By.XPath("//div[text()='End Date']//following-sibling::div"));
 
         //Location Type
-        private static IWebElement actualLocationType => driver.FindElement(By.XPath("//div[text()='Location Type']//following-sibling::div"));
+        private IWebElement actualLocationType => driver.FindElement(By.XPath("//div[text()='Location Type']//following-sibling::div"));
 
         //Skill Trade
-        private static IWebElement actualSkillsTrade => driver.FindElement(By.XPath("//div[text()='Skills Trade']//following-sibling::div"));
+        private IWebElement actualSkillsTrade => driver.FindElement(By.XPath("//div[text()='Skills Trade']//following-sibling::div"));
 
         //Skill Exchange
-        private static IWebElement actualSkillExchange => driver.FindElement(By.XPath("//div[text()='Skills Trade']//following-sibling::div/span"));
+        private IWebElement actualSkillExchange => driver.FindElement(By.XPath("//div[text()='Skills Trade']//following-sibling::div/span"));
         #endregion
 
         #region Page Objects for error Messages
 
         //Title message
-        private static IWebElement errorTitle => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[1]/div/div[2]/div/div[2]/div"));
+        private IWebElement errorTitle => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[1]/div/div[2]/div/div[2]/div"));
 
         //Description message
-        private static IWebElement errorDescription => driver.FindElement(By.XPath("//div[@class='tooltip-target ui grid']//div/div[2]/div[2]/div"));
+        private IWebElement errorDescription => driver.FindElement(By.XPath("//div[@class='tooltip-target ui grid']//div/div[2]/div[2]/div"));
 
         //Category message
-        private static IWebElement errorCategory => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[3]/div[2]/div[2]"));
+        private IWebElement errorCategory => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[3]/div[2]/div[2]"));
 
         //Subcategory message
-        private static IWebElement errorSubcategory => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[3]/div[2]/div/div[2]/div[2]/div"));
+        private IWebElement errorSubcategory => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[3]/div[2]/div/div[2]/div[2]/div"));
 
         //Tags message
-        private static IWebElement errorTags => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[4]/div[2]/div[2]"));
+        private IWebElement errorTags => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[4]/div[2]/div[2]"));
 
         //StartDate message
-        private static IWebElement errorStartDate1 => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div[2]"));
+        private IWebElement errorStartDate1 => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div[2]"));
 
         //StartDate mesage 2
-        private static IWebElement errorStartDate2 => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div[3]"));
+        private IWebElement errorStartDate2 => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div[3]"));
 
         //Skill-Exchange tag
-        private static IWebElement errorSkillExchangeTags => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[8]/div[4]/div[2]"));
+        private IWebElement errorSkillExchangeTags => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[8]/div[4]/div[2]"));
 
         //Message
-        private static IWebElement message => driver.FindElement(By.XPath(e_message));
-        private static string e_message = "//div[@class='ns-box-inner']";
+        private IWebElement message => driver.FindElement(By.XPath(e_message));
+        private string e_message = "//div[@class='ns-box-inner']";
 
         #endregion
 
         //Filling Share-Skill details
-        public static void EnterShareSkill(int rowNumber, string worksheet)
+        public void EnterShareSkill(int rowNumber, string worksheet)
         {
-            //ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
-
+            //Initial a struct object and assign values
             Listing excelData = new Listing();
             GetExcel(rowNumber, worksheet, out excelData);
 
@@ -203,11 +202,12 @@ namespace Competition.Pages
 
             //Click on Save
             Save.Click();
+            
         }
 
         #region Sub-methods for EnterShareSkill
         //Select Service type
-        internal static void SelectServiceType(string serviceTypeText)
+        internal void SelectServiceType(string serviceTypeText)
         {
             string elementValue = "0";
             if (serviceTypeText.Equals("One-off service"))
@@ -222,7 +222,7 @@ namespace Competition.Pages
         }
 
         //Select Location type
-        internal static void SelectLocationType(string locationTypeText)
+        internal void SelectLocationType(string locationTypeText)
         {
             //Select Location type
             string elementValue = "0";
@@ -238,7 +238,7 @@ namespace Competition.Pages
         }
 
         //Enter Available days and hours
-        internal static void EnterAvailableDaysAndHours(string availableDaysText, string startTimeText, string endTimeText)
+        internal void EnterAvailableDaysAndHours(string availableDaysText, string startTimeText, string endTimeText)
         {
             //Enter available Days array = 
             string indexValue = "";
@@ -284,7 +284,7 @@ namespace Competition.Pages
         }
 
         //Select Skill trade
-        internal static void SelectSkillTrade(string skillTradeText, string skillExchangeText, string creditText)
+        internal void SelectSkillTrade(string skillTradeText, string skillExchangeText, string creditText)
         {
             //Select "Skill Trade" options
             string elementValue = "true";
@@ -318,7 +318,7 @@ namespace Competition.Pages
         }
 
         //Upload Work samples
-        internal static void UploadWorkSamples()
+        internal void UploadWorkSamples()
         {
             btnWorkSamples.Click();
             wait(3);
@@ -331,7 +331,7 @@ namespace Competition.Pages
         }
 
         //Click Active or Hidden
-        internal static void ClickActiveOption(string ActiveOptionText)
+        internal void ClickActiveOption(string ActiveOptionText)
         {
             string elementValue = "true";
             if (ActiveOptionText.Equals("Hidden"))
@@ -347,7 +347,7 @@ namespace Competition.Pages
         #endregion
 
         //sub-method for Edit
-        internal static void ClearData()
+        internal void ClearData()
         {
             //Clear title
             Title.Click();
@@ -418,10 +418,11 @@ namespace Competition.Pages
         }
 
         //Negative test
-        internal static void EnterShareSkill_InvalidData(int testData, string worksheet)
+        internal void EnterShareSkill_InvalidData(int testData, string worksheet)
         {
+            ShareSkill shareSkillObj = new ShareSkill();
             Listing test = new Listing();
-            ShareSkill.GetExcel(testData, worksheet, out test);
+            shareSkillObj.GetExcel(testData, worksheet, out test);
 
             //Assert no data
             if (test.isClickSaveFirst == "Yes")
@@ -441,7 +442,7 @@ namespace Competition.Pages
         }
 
         #region Sub-methods for EnterShareSkill_InvalidData
-        internal static void EnterDataOnConditions(string titleText, string descriptionText, string tagsText,
+        internal void EnterDataOnConditions(string titleText, string descriptionText, string tagsText,
             string startDateText, string endDateText, string skillTradeText, string skillExchangeText,
             string creditAmountText, string categoryText, string subCategoryText)
         {
@@ -500,7 +501,7 @@ namespace Competition.Pages
         #endregion
 
         #region struct and sub-methods for assertions
-        public struct Listing
+        internal struct Listing
         {
             public string title;
             public string description;
@@ -520,7 +521,7 @@ namespace Competition.Pages
             public string ActiveOption;
             public string isClickSaveFirst;
         }
-        public static void GetExcel(int rowNumber, string worksheet, out Listing excelData)
+        internal void GetExcel(int rowNumber, string worksheet, out Listing excelData)
         {
             ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
 
@@ -543,7 +544,7 @@ namespace Competition.Pages
             excelData.isClickSaveFirst = ExcelLib.ReadData(rowNumber, "isClickSaveFirst");
 
         }
-        public static void GetWeb(out Listing webData)
+        internal void GetWeb(out Listing webData)
         {
             webData.title = actualTitle.Text;
             webData.description = actualDescription.Text;
@@ -564,7 +565,7 @@ namespace Competition.Pages
             webData.ActiveOption = "dummy";
             webData.isClickSaveFirst = "dummy";
         }
-        public static void GetPortalMessage(out Listing portal)
+        internal void GetPortalMessage(out Listing portal)
         {
             portal.title = errorTitle.Text;
             portal.description = errorDescription.Text;
@@ -585,43 +586,44 @@ namespace Competition.Pages
             portal.ActiveOption = "dummy";
             portal.isClickSaveFirst = "dummy";
         }
-        public static string GetSkillTrade(string skillTradeOption)
+
+
+        internal string GetSkillTrade(string skillTradeOption)
         {
             if (skillTradeOption == "Credit")
                 return actualSkillsTrade.Text;
             else
                 return actualSkillExchange.Text;
         }
-        public static string GetMessage()
+        internal string GetMessage()
         {
             //Check confirmation message
             WaitForElement(driver, By.XPath(e_message), 5);
             return message.Text;
         }
-        public static string GetDateErrorMessage1()
+        internal string GetDateErrorMessage1()
         {
             return errorStartDate2.Text;
         }
-        public static string GetDateErrorMessage2()
+        internal string GetDateErrorMessage2()
         {
             return errorStartDate1.Text;
         }
-        public static string GetCategoryError()
+        internal string GetCategoryError()
         {
             return errorCategory.Text;
         }
-        public static string GetSubcategoryError()
+        internal string GetSubcategoryError()
         {
             return errorSubcategory.Text;
         }
-        public static string GetSkillExchangeError()
+        internal string GetSkillExchangeError()
         {
             return errorSkillExchangeTags.Text;
         }
-        public static string GetCredit()
+        internal string GetCredit()
         {
             return CreditAmount.Text;
-            
         }
         #endregion
     }
