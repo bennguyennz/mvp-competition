@@ -13,8 +13,7 @@ namespace Competition.Global
 {
     class GlobalDefinitions
     {
-        //Initialise the browser
-
+        //Initialise driver
         public static IWebDriver driver { get; set; }
 
         #region WaitforElement 
@@ -85,7 +84,7 @@ namespace Competition.Global
             {
                 try
                 {
-                    //Retriving Data using LINQ to reduce much of iterations
+                    //Retrieving Data using LINQ to reduce much of iterations
 
                     rowNumber = rowNumber - 1;
                     string data = (from colData in dataCol
@@ -137,7 +136,7 @@ namespace Competition.Global
         #region screenshots
         public class Screenshot
         {
-            public static string SaveScreenshot(IWebDriver driver, string ScreenShotFileName) // Definition
+            public static string SaveScreenshot(IWebDriver driver, string ScreenShotFileName)
             {
                 if (!System.IO.Directory.Exists(Base.ScreenshotPath))
                 {

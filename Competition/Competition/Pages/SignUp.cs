@@ -40,25 +40,25 @@ namespace Competition.Pages
         internal void Register()
         {
             //Populate the excel data
-            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SignUp");
+            ExcelLib.PopulateInCollection(Base.ExcelPath, "SignUp");
 
             //Click on Join button
             Join.Click();
 
             //Enter FirstName
-            FirstName.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "FirstName"));
+            FirstName.SendKeys(ExcelLib.ReadData(2, "FirstName"));
 
             //Enter LastName
-            LastName.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "LastName"));
+            LastName.SendKeys(ExcelLib.ReadData(2, "LastName"));
 
             //Enter Email
-            Email.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Email"));
+            Email.SendKeys(ExcelLib.ReadData(2, "Email"));
 
             //Enter Password
-            Password.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Password"));
+            Password.SendKeys(ExcelLib.ReadData(2, "Password"));
 
             //Enter Password again to confirm
-            ConfirmPassword.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "ConfirmPswd"));
+            ConfirmPassword.SendKeys(ExcelLib.ReadData(2, "ConfirmPswd"));
 
             //Click on Checkbox
             Checkbox.Click();

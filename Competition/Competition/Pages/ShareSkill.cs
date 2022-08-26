@@ -14,12 +14,9 @@ using static Competition.Global.Base;
 
 namespace Competition.Pages
 {
-    internal class ShareSkill
+    public class ShareSkill
     {
         #region Page Objects for EnterShareSkill
-        //ShareSkill Button
-        private IWebElement btnShareSkill => driver.FindElement(By.LinkText("Share Skill"));
-
         //Title textbox
         private IWebElement Title => driver.FindElement(By.Name("title"));
 
@@ -43,7 +40,7 @@ namespace Competition.Pages
         private IList<IWebElement> radioServiceType => driver.FindElements(By.Name("serviceType"));
 
         //Location Type radio button
-        private IList <IWebElement> radioLocationType => driver.FindElements(By.Name("locationType"));
+        private IList<IWebElement> radioLocationType => driver.FindElements(By.Name("locationType"));
 
         //Start Date dropdown
         private IWebElement StartDateDropDown => driver.FindElement(By.Name("startDate"));
@@ -52,14 +49,14 @@ namespace Competition.Pages
         private IWebElement EndDateDropDown => driver.FindElement(By.Name("endDate"));
 
         //Available days
-        private IList <IWebElement> Days => driver.FindElements(By.XPath("//input[@name='Available']"));
+        private IList<IWebElement> Days => driver.FindElements(By.XPath("//input[@name='Available']"));
 
         //Starttime
-        private IList <IWebElement> StartTime => driver.FindElements(By.Name("StartTime"));
+        private IList<IWebElement> StartTime => driver.FindElements(By.Name("StartTime"));
 
         //EndTime
         private IList<IWebElement> EndTime => driver.FindElements(By.Name("EndTime"));
-        
+
 
         //StartTime dropdown
         private IWebElement StartTimeDropDown => driver.FindElement(By.XPath("//div[3]/div[2]/input[1]"));
@@ -68,12 +65,12 @@ namespace Competition.Pages
         private IWebElement EndTimeDropDown => driver.FindElement(By.XPath("//div[3]/div[3]/input[1]"));
 
         //Skill Trade option
-        private IList <IWebElement> radioSkillTrade => driver.FindElements(By.Name("skillTrades"));
+        private IList<IWebElement> radioSkillTrade => driver.FindElements(By.Name("skillTrades"));
 
         //Skill Exchange
         private IWebElement SkillExchange => driver.FindElement(By.XPath("//div[@class='form-wrapper']//input[@type='text']"));
         private IList<IWebElement> skillExchangeTags => driver.FindElements(By.XPath("//form[@class='ui form']/div[8]/div[4]/div/div/div/div/span/a"));
-        
+
 
         //Credit textbox
         private IWebElement CreditAmount => driver.FindElement(By.XPath("//input[@placeholder='Amount']"));
@@ -82,14 +79,14 @@ namespace Competition.Pages
         private IWebElement btnWorkSamples => driver.FindElement(By.XPath("//i[@class='huge plus circle icon padding-25']"));
 
         //Active option
-        private IList <IWebElement> radioActive => driver.FindElements(By.XPath("//input[@name='isActive']"));
-       
+        private IList<IWebElement> radioActive => driver.FindElements(By.XPath("//input[@name='isActive']"));
+
         //Save button
         private IWebElement Save => driver.FindElement(By.XPath("//input[@value='Save']"));
         #endregion
 
-        #region Page Objects for ValidateShareSkill
-         //Title
+        #region Page Objects for VerifyShareSkill
+        //Title
         private IWebElement actualTitle => driver.FindElement(By.XPath("//span[@class='skill-title']"));
 
         //Description
@@ -124,17 +121,16 @@ namespace Competition.Pages
 
         //Title message
         private IWebElement errorTitle => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[1]/div/div[2]/div/div[2]/div"));
-        
+
         //Description message
         private IWebElement errorDescription => driver.FindElement(By.XPath("//div[@class='tooltip-target ui grid']//div/div[2]/div[2]/div"));
-        
+
         //Category message
         private IWebElement errorCategory => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[3]/div[2]/div[2]"));
-        private IWebElement categoryDisplayText => driver.FindElement(By.Name("categoryID")); 
-        
+
         //Subcategory message
         private IWebElement errorSubcategory => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[3]/div[2]/div/div[2]/div[2]/div"));
-        
+
         //Tags message
         private IWebElement errorTags => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[4]/div[2]/div[2]"));
 
@@ -143,7 +139,7 @@ namespace Competition.Pages
 
         //StartDate mesage 2
         private IWebElement errorStartDate2 => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div[3]"));
-        
+
         //Skill-Exchange tag
         private IWebElement errorSkillExchangeTags => driver.FindElement(By.XPath("//*[@id='service-listing-section']/div[2]/div/form/div[8]/div[4]/div[2]"));
 
@@ -156,74 +152,100 @@ namespace Competition.Pages
         //Filling Share-Skill details
         public void EnterShareSkill(int rowNumber, string worksheet)
         {
-            //var node = test.CreateNode("Step 1. Create listing");
-            //Populate excel file
-            ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
+            //Initial a struct object and assign values
+            Listing excelData = new Listing();
+            GetExcel(rowNumber, worksheet, out excelData);
 
             //Enter Title 
-            Title.SendKeys(ExcelLib.ReadData(rowNumber, "Title"));
+            string title = excelData.title;
+            Title.SendKeys(title);
 
             //Enter Description
-            Description.SendKeys(ExcelLib.ReadData(rowNumber, "Description"));
+            Description.SendKeys(excelData.description);
 
             //Select category
             var selectCategory = new SelectElement(CategoryDropDown);
-            selectCategory.SelectByText(ExcelLib.ReadData(rowNumber, "Category"));
+            selectCategory.SelectByText(excelData.category);
 
             //Select Subcategory
             var selectSubcategory = new SelectElement(SubCategoryDropDown);
-            selectSubcategory.SelectByText(ExcelLib.ReadData(rowNumber, "Subcategory"));
+            selectSubcategory.SelectByText(excelData.subcategory);
 
             //Enter tag
             Tags.Click();
-            Tags.SendKeys(ExcelLib.ReadData(rowNumber, "Tags"));
+            Tags.SendKeys(excelData.tags);
             Tags.SendKeys(Keys.Return);
 
             //Select Service type
-            string expectedServiceType = ExcelLib.ReadData(rowNumber, "ServiceType");
-            string expectedServiceValue = "0";
-            if (expectedServiceType.Equals("One-off service"))
-                expectedServiceValue = "1";
+            SelectServiceType(excelData.serviceType);
+
+            //Select Location type
+            SelectLocationType(excelData.locationType);
+
+            //Enter Start date
+            StartDateDropDown.SendKeys(excelData.startDate);
+
+            //Enter End date
+            EndDateDropDown.SendKeys(excelData.endDate);
+
+            //Enter Available days and hours
+            EnterAvailableDaysAndHours((excelData.availableDays), (excelData.startTime), (excelData.endTime));
+
+            //Select Skill Trade: "Credeit" or "Skill-exchange"
+            SelectSkillTrade(excelData.skillTrade, excelData.skillExchange, excelData.credit);
+
+            //Click button Upload Work Samples
+            UploadWorkSamples();
+
+            //Click Active or Hidden
+            ClickActiveOption(excelData.ActiveOption);
+
+            //Click on Save
+            Save.Click();
+            
+        }
+
+        #region Sub-methods for EnterShareSkill
+        //Select Service type
+        internal void SelectServiceType(string serviceTypeText)
+        {
+            string elementValue = "0";
+            if (serviceTypeText.Equals("One-off service"))
+                elementValue = "1";
 
             for (int i = 0; i < radioServiceType.Count(); i++)
             {
-                string actualServiceValue = radioServiceType[i].GetAttribute("Value");
-                if (expectedServiceValue.Equals(actualServiceValue))
-                {
+                string actualElementValue = radioServiceType[i].GetAttribute("Value");
+                if (elementValue.Equals(actualElementValue))
                     radioServiceType[i].Click();
-                }
             }
+        }
 
+        //Select Location type
+        internal void SelectLocationType(string locationTypeText)
+        {
             //Select Location type
-            string expectedLocationType = ExcelLib.ReadData(rowNumber, "LocationType");
-            
-            string expectedLocationValue = "0";
-            if (expectedLocationType.Equals("Online"))
-                expectedLocationValue = "1";
-                
-            for (int i=0; i < radioLocationType.Count(); i++)
+            string elementValue = "0";
+            if (locationTypeText.Equals("Online"))
+                elementValue = "1";
+
+            for (int i = 0; i < radioLocationType.Count(); i++)
             {
-                string actualLocationValue = radioLocationType[i].GetAttribute("Value");
-                if (expectedLocationValue.Equals(actualLocationValue))
-                {
+                string actualElementValue = radioLocationType[i].GetAttribute("Value");
+                if (elementValue.Equals(actualElementValue))
                     radioLocationType[i].Click();
-                }
             }
+        }
 
-            //Enter Start date
-            StartDateDropDown.SendKeys(ExcelLib.ReadData(rowNumber, "StartDate"));
-
-            //Enter End date
-            EndDateDropDown.SendKeys(ExcelLib.ReadData(rowNumber, "EndDate"));
-            EndDateDropDown.SendKeys(Keys.Enter);
-
-            //Enter available Days
-            string expectedDays = ExcelLib.ReadData(rowNumber, "Days");
+        //Enter Available days and hours
+        internal void EnterAvailableDaysAndHours(string availableDaysText, string startTimeText, string endTimeText)
+        {
+            //Enter available Days array = 
             string indexValue = "";
 
-            switch (expectedDays)
+            switch (availableDaysText)
             {
-                case "Sun": 
+                case "Sun":
                     indexValue = "0";
                     break;
                 case "Mon":
@@ -252,48 +274,52 @@ namespace Competition.Pages
             for (int i = 0; i < Days.Count; i++)
             {
                 if (indexValue.Equals(Days[i].GetAttribute("index")))
-                { 
+                {
                     Days[i].Click();
-                    string startTime = ExcelLib.ReadData(rowNumber, "StartTime");
-                    string endTime = ExcelLib.ReadData(rowNumber, "EndTime");
-                    StartTime[i].SendKeys(startTime);
-                    EndTime[i].SendKeys(endTime);
+
+                    StartTime[i].SendKeys(startTimeText);
+                    EndTime[i].SendKeys(endTimeText);
                 }
             }
-            wait(1);
+        }
 
+        //Select Skill trade
+        internal void SelectSkillTrade(string skillTradeText, string skillExchangeText, string creditText)
+        {
             //Select "Skill Trade" options
-            string expectedSkillTrade = ExcelLib.ReadData(rowNumber, "SkillTradeOption");
-            string expectedSkillValue = "true";
+            string elementValue = "true";
 
-            if(expectedSkillTrade.Equals("Credit"))
-                expectedSkillValue = "false";
+            if (skillTradeText.Equals("Credit"))
+                elementValue = "false";
 
             for (int i = 0; i < radioSkillTrade.Count(); i++)
             {
-                string actualSkillTradeValue=radioSkillTrade[i].GetAttribute("value");
-                if (expectedSkillValue.Equals(actualSkillTradeValue))
+                string actualElementValue = radioSkillTrade[i].GetAttribute("value");
+                if (elementValue.Equals(actualElementValue))
                 {
                     //Select "Skill exchange" or "Credit"
                     radioSkillTrade[i].Click();
                     wait(1);
 
-                    if (expectedSkillTrade.Equals("Skill-exchange"))
-                    //Enter tags for Skill-exchange
+                    if (skillTradeText.Equals("Skill-exchange"))
                     {
+                        //Enter tags for Skill-exchange
                         SkillExchange.Click();
-                        SkillExchange.SendKeys(ExcelLib.ReadData(rowNumber, "SkillExchange"));
+                        SkillExchange.SendKeys(skillExchangeText);
                         SkillExchange.SendKeys(Keys.Return);
                     }
                     else
                     {
                         //Enter Credit amount
-                        CreditAmount.SendKeys(ExcelLib.ReadData(rowNumber, "CreditAmount"));
+                        CreditAmount.SendKeys(creditText);
                     }
-                }               
+                }
             }
+        }
 
-            //Click button Upload Work Samples
+        //Upload Work samples
+        internal void UploadWorkSamples()
+        {
             btnWorkSamples.Click();
             wait(3);
 
@@ -302,95 +328,35 @@ namespace Competition.Pages
             {
                 exeProcess.WaitForExit();
             }
+        }
 
-            wait(3);
+        //Click Active or Hidden
+        internal void ClickActiveOption(string ActiveOptionText)
+        {
+            string elementValue = "true";
+            if (ActiveOptionText.Equals("Hidden"))
+                elementValue = "false";
 
-            //Select ActiveOption
-            string expectedActiveOption = ExcelLib.ReadData(rowNumber, "ActiveOption");
-
-            string expectedActiveValue = "true";
-            if (expectedActiveOption.Equals("Hidden"))
-                expectedActiveValue = "false";
-
-            for (int i=0; i< radioActive.Count(); i++)
+            for (int i = 0; i < radioActive.Count(); i++)
             {
-                string actualActiveValue = radioActive[i].GetAttribute("Value");
-                if (expectedActiveValue.Equals(actualActiveValue))
+                string actualElementValue = radioActive[i].GetAttribute("Value");
+                if (elementValue.Equals(actualElementValue))
                     radioActive[i].Click();
             }
-
-            //Click on Save
-            Save.Click();
-            wait(3);
-            //node.Pass("Step 1 is Passed");
         }
+        #endregion
 
-        //Assertions on ShareSkill
-        public void VefiryEnterShareSkill(int rowNumber, string worksheet)
-        {
-            //var node = test.CreateNode("Step 2. Verify listing");
-            
-            //Populate excel data
-            ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
-
-            //Verify expected Title vs actual Title
-            Assert.AreEqual(ExcelLib.ReadData(rowNumber, "Title"), actualTitle.Text);
-
-            //Verify expected Description vs actual Description
-            Assert.AreEqual(ExcelLib.ReadData(rowNumber, "Description"), actualDescription.Text);
-
-            //Verify expected Category vs actual Category
-            Assert.AreEqual(ExcelLib.ReadData(rowNumber, "Category"), actualCategory.Text);
-
-            //Verify expected Subcategory vs actual Subcategory
-            Assert.AreEqual(ExcelLib.ReadData(rowNumber, "Subcategory"), actualSubcategory.Text);
-
-            //Verify expected ServiceType vs actual ServiceType
-            string expectedServiceType = ExcelLib.ReadData(rowNumber, "ServiceType");
-            if (expectedServiceType == "One-off service")
-            {
-                expectedServiceType = "One-off";
-            }
-            else expectedServiceType = "Hourly";
-
-            Assert.AreEqual(expectedServiceType, actualServiceType.Text);
-
-            //Verify expected StartDate vs actual StartDate
-            string expectedStartDate = DateTime.Parse(ExcelLib.ReadData(rowNumber, "StartDate"))
-                .ToString("yyyy-MM-dd"); //Read data, parse as date, and format reverse as string
-            Assert.AreEqual(expectedStartDate, actualStartDate.Text);
-
-            //Verify expected EndDate vs actual EndDate
-            string expectedEndDate = DateTime.Parse(ExcelLib.ReadData(rowNumber, "EndDate")).ToString("yyyy-MM-dd");
-            Assert.AreEqual(expectedEndDate, actualEndDate.Text);
-
-            //Verify expected LocationType vs actual LocationType
-            string expectedLoationType = ExcelLib.ReadData(rowNumber, "LocationType");
-            if (expectedLoationType.Equals("On-site"))
-                expectedLoationType = "On-Site";
-
-            Assert.AreEqual(expectedLoationType, actualLocationType.Text);
-
-            //Verify Skills Trade
-            if (ExcelLib.ReadData(rowNumber, "SkillTradeOption") == "Credit")
-                Assert.AreEqual("None Specified", actualSkillsTrade.Text);
-            else
-                Assert.AreEqual(ExcelLib.ReadData(rowNumber, "SkillExchange"), actualSkillExchange.Text);
-
-            //node.Pass("Step 2 is passed");
-        }
-
-        //Clear Data for Editing Listing
-        public void ClearData()
+        //sub-method for Edit
+        internal void ClearData()
         {
             //Clear title
             Title.Click();
-            Title.SendKeys(Keys.Control+"A");
+            Title.SendKeys(Keys.Control + "A");
             Title.SendKeys(Keys.Delete);
 
             //Clear description
             Description.Click();
-            Description.SendKeys(Keys.Control+"A");
+            Description.SendKeys(Keys.Control + "A");
             Description.SendKeys(Keys.Delete);
 
             //Clear tags
@@ -398,9 +364,7 @@ namespace Competition.Pages
             for (int i = 0; i < countTags; i++)
             {
                 if (countTags > 0)
-                {
                     displayedTags[i].Click();
-                }
             }
 
             //Clear days
@@ -426,7 +390,6 @@ namespace Competition.Pages
                     EndTime[i].SendKeys(Keys.Tab);
                     EndTime[i].SendKeys(Keys.Delete);
                 }
-
             }
             wait(1);
 
@@ -454,157 +417,214 @@ namespace Competition.Pages
 
         }
 
-        //Negative test case
-        public void EnterShareSkill_InvalidData(int testData, int errorMessage, int outputMessage, string worksheet)
+        //Negative test
+        internal void EnterShareSkill_InvalidData(int testData, string worksheet)
         {
-            //Populate excel file
-            ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
-            string textSaveButton = ExcelLib.ReadData(testData, "isClickSaveFirst");
-            if (textSaveButton == "Yes")
+            ShareSkill shareSkillObj = new ShareSkill();
+            Listing test = new Listing();
+            shareSkillObj.GetExcel(testData, worksheet, out test);
+
+            //Assert no data
+            if (test.isClickSaveFirst == "Yes")
             {
                 Save.Click();
-
-                //Check confirmation message
-                WaitForElement(driver, By.XPath(e_message), 3);
-                Assert.That((message.Text).Equals(ExcelLib.ReadData(errorMessage, "isClickSaveFirst")), ExcelLib.ReadData(outputMessage, "isClickSaveFirst"));
-
-                //Check title message
-                Assert.That((errorTitle.Text).Equals(ExcelLib.ReadData(errorMessage, "Title")), ExcelLib.ReadData(outputMessage, "Title"));
-
-                //Check description message
-                Assert.That((errorDescription.Text).Equals(ExcelLib.ReadData(errorMessage, "Description")), ExcelLib.ReadData(outputMessage, "Description"));
-
-                //Check Category message
-                Assert.That((errorCategory.Text).Equals(ExcelLib.ReadData(errorMessage, "Category")), ExcelLib.ReadData(outputMessage, "Category"));
-
-                //Check tags message
-                Assert.That((errorTags.Text).Equals(ExcelLib.ReadData(errorMessage, "Tags")), ExcelLib.ReadData(outputMessage, "Tags"));
-
-                //Check skill exchange tag message
-                Assert.That((errorSkillExchangeTags.Text).Equals(ExcelLib.ReadData(errorMessage, "SkillExchange")), ExcelLib.ReadData(outputMessage, "SkillExchange"));
-
             }
-            else if (textSaveButton == "No")
+            //Assert invalid data
+            else if (test.isClickSaveFirst == "No")
             {
-                //Enter title
-                string titleText = ExcelLib.ReadData(testData, "Title");
-                if (titleText != "Ignore")
-                {
-                    Title.SendKeys(titleText);
-                }
-                //Enter Description
-                string descriptionText = ExcelLib.ReadData(testData, "Description");
-                if (descriptionText != "Ignore")
-                {
-                    Description.SendKeys(descriptionText);
-                }
+                //Enter invalid data, depending on excel
+                EnterDataOnConditions(test.title, test.description, test.tags, test.startDate, test.endDate,
+                    test.skillTrade, test.skillExchange, test.credit, test.category, test.subcategory);
 
-                //Verify tags
-                string tagsText = ExcelLib.ReadData(testData, "Tags");
-                if (tagsText != "Ignore")
-                {
-                    Tags.Click();
-                    Tags.SendKeys(tagsText);
-                    Tags.SendKeys(Keys.Return);
-
-                }
-
-                //Verify skill exchange tags
-                string textSkillExchangeTag = ExcelLib.ReadData(testData, "SkillExchange");
-                if (textSkillExchangeTag != "Ignore")
-                {
-                    //Select "Skill Trade" options
-                    string expectedSkillTrade = ExcelLib.ReadData(testData, "SkillTradeOption");
-                    string expectedSkillValue = "true";
-
-                    if (expectedSkillTrade.Equals("Credit"))
-                        expectedSkillValue = "false";
-
-                    for (int i = 0; i < radioSkillTrade.Count(); i++)
-                    {
-                        string actualSkillTradeValue = radioSkillTrade[i].GetAttribute("value");
-                        if (expectedSkillValue.Equals(actualSkillTradeValue))
-                        {
-                            //Select "Skill exchange" or "Credit"
-                            radioSkillTrade[i].Click();
-                            wait(1);
-
-                            if (expectedSkillTrade.Equals("Skill-exchange"))
-                            //Enter tags for Skill-exchange
-                            {
-                                SkillExchange.Click();
-                                SkillExchange.SendKeys(ExcelLib.ReadData(testData, "SkillExchange"));
-                                SkillExchange.SendKeys(Keys.Return);
-                            }
-                            else
-                            {
-                                //Enter Credit amount
-                                CreditAmount.SendKeys(ExcelLib.ReadData(testData, "CreditAmount"));
-                            }
-                        }
-                    }
-                }
-
-                //Select category 
-                string categoryText = ExcelLib.ReadData(testData, "Category");
-                var selectCategory = new SelectElement(CategoryDropDown);
-                if (categoryText != "Ignore")
-                {
-                    selectCategory.SelectByText(categoryText);
-                }
-
-                string subCategoryText = ExcelLib.ReadData(testData, "Subcategory");
-                if (subCategoryText == "Ignore")
-                {
-                    //Select Subcategory
-                    var selectSubcategory = new SelectElement(SubCategoryDropDown);
-                    selectSubcategory.SelectByText(ExcelLib.ReadData(testData, "Subcategory"));
-                }
-
-
-
+                //Click Save button
                 Save.Click();
-
-                //Check confirmation message
-                WaitForElement(driver, By.XPath(e_message), 3);
-                Assert.That((message.Text).Equals(ExcelLib.ReadData(errorMessage, "isClickSaveFirst")), ExcelLib.ReadData(outputMessage, "isClickSaveFirst"));
-
-                //Check title
-                Assert.That((errorTitle.Text).Equals(ExcelLib.ReadData(errorMessage, "Title")), ExcelLib.ReadData(outputMessage, "Title"));
-
-                //Check description
-                Assert.That((errorDescription.Text).Equals(ExcelLib.ReadData(errorMessage, "Description")), ExcelLib.ReadData(outputMessage, "Description"));
-
-                if (categoryText == "Ignore")
-                { 
-                    //Check category message
-                    Assert.That((errorCategory.Text).Equals(ExcelLib.ReadData(errorMessage, "Category")), ExcelLib.ReadData(outputMessage, "Category"));
-                } 
-                else
-                //Assert subcategory
-                {
-                    Assert.That((errorSubcategory.Text).Equals(ExcelLib.ReadData(errorMessage, "Subcategory")), ExcelLib.ReadData(outputMessage, "Subcategory"));
-                }
-
-                //Check tags message
-                Assert.That((errorTags.Text).Equals(ExcelLib.ReadData(errorMessage, "Tags")), ExcelLib.ReadData(outputMessage, "Tags"));
-
-                //Check skill exchange tags or credit value
-                if (radioSkillTrade[0].Enabled == true)
-                {
-                    //Check skill exchange tag message
-                    Assert.That((errorSkillExchangeTags.Text).Equals(ExcelLib.ReadData(errorMessage, "SkillExchange")), ExcelLib.ReadData(outputMessage, "SkillExchange"));
-                }
-                else
-                {
-                    //Check credit value
-                    Assert.That(CreditAmount.Text != ExcelLib.ReadData(testData, "CreditAmount"), ExcelLib.ReadData(outputMessage, "CreditAmount"));
-                }
-
-
             }
-              
         }
-        
+
+        #region Sub-methods for EnterShareSkill_InvalidData
+        internal void EnterDataOnConditions(string titleText, string descriptionText, string tagsText,
+            string startDateText, string endDateText, string skillTradeText, string skillExchangeText,
+            string creditAmountText, string categoryText, string subCategoryText)
+        {
+            //Enter title
+            if (titleText != "Ignore")
+            {
+                Title.SendKeys(titleText);
+            }
+
+            //Enter Description
+            if (descriptionText != "Ignore")
+            {
+                Description.SendKeys(descriptionText);
+            }
+
+            //Select category 
+            var selectCategory = new SelectElement(CategoryDropDown);
+            if (categoryText != "Ignore")
+            {
+                selectCategory.SelectByText(categoryText);
+            }
+
+            if (subCategoryText == "Ignore")
+            {
+                //Select Subcategory
+                var selectSubcategory = new SelectElement(SubCategoryDropDown);
+                selectSubcategory.SelectByText(subCategoryText);
+            }
+
+            //Enter tags
+            if (tagsText != "Ignore")
+            {
+                Tags.Click();
+                Tags.SendKeys(tagsText);
+                Tags.SendKeys(Keys.Return);
+            }
+
+            //Enter Start date
+            if (startDateText != "Ignore")
+            {
+                StartDateDropDown.SendKeys(startDateText);
+            }
+
+            //Enter End date
+            if (endDateText != "Ignore")
+            {
+                EndDateDropDown.SendKeys(endDateText);
+            }
+
+            //Select "Skill Trade" options
+            if (skillTradeText != "Ignore")
+            {
+                SelectSkillTrade(skillTradeText, skillExchangeText, creditAmountText);
+            }
+        }
+        #endregion
+
+        #region struct and sub-methods for assertions
+        internal struct Listing
+        {
+            public string title;
+            public string description;
+            public string category;
+            public string subcategory;
+            public string startDate;
+            public string endDate;
+            public string serviceType;
+            public string locationType;
+            public string skillTrade;
+            public string skillExchange;
+            public string tags;
+            public string availableDays;
+            public string startTime;
+            public string endTime;
+            public string credit;
+            public string ActiveOption;
+            public string isClickSaveFirst;
+        }
+        internal void GetExcel(int rowNumber, string worksheet, out Listing excelData)
+        {
+            ExcelLib.PopulateInCollection(Base.ExcelPath, worksheet);
+
+            excelData.title = ExcelLib.ReadData(rowNumber, "Title");
+            excelData.description = ExcelLib.ReadData(rowNumber, "Description");
+            excelData.category = ExcelLib.ReadData(rowNumber, "Category");
+            excelData.subcategory = ExcelLib.ReadData(rowNumber, "Subcategory");
+            excelData.startDate = ExcelLib.ReadData(rowNumber, "StartDate");
+            excelData.endDate = ExcelLib.ReadData(rowNumber, "EndDate");
+            excelData.serviceType = ExcelLib.ReadData(rowNumber, "ServiceType");
+            excelData.locationType = ExcelLib.ReadData(rowNumber, "LocationType");
+            excelData.skillTrade = ExcelLib.ReadData(rowNumber, "SkillTradeOption");
+            excelData.skillExchange = ExcelLib.ReadData(rowNumber, "SkillExchange");
+            excelData.tags = ExcelLib.ReadData(rowNumber, "Tags");
+            excelData.availableDays = ExcelLib.ReadData(rowNumber, "Days");
+            excelData.startTime = ExcelLib.ReadData(rowNumber, "StartTime");
+            excelData.endTime = ExcelLib.ReadData(rowNumber, "EndTime");
+            excelData.credit = ExcelLib.ReadData(rowNumber, "CreditAmount");
+            excelData.ActiveOption = ExcelLib.ReadData(rowNumber, "ActiveOption");
+            excelData.isClickSaveFirst = ExcelLib.ReadData(rowNumber, "isClickSaveFirst");
+
+        }
+        internal void GetWeb(out Listing webData)
+        {
+            webData.title = actualTitle.Text;
+            webData.description = actualDescription.Text;
+            webData.category = actualCategory.Text;
+            webData.subcategory = actualSubcategory.Text;
+            webData.startDate = actualStartDate.Text;
+            webData.endDate = actualEndDate.Text;
+            webData.serviceType = actualServiceType.Text;
+            webData.locationType = actualLocationType.Text;
+
+            webData.skillTrade = "dummy";
+            webData.skillExchange = "dummy";
+            webData.tags = "dummy";
+            webData.availableDays = "dummy";
+            webData.startTime = "dummy";
+            webData.endTime = "dummy";
+            webData.credit = "dummy";
+            webData.ActiveOption = "dummy";
+            webData.isClickSaveFirst = "dummy";
+        }
+        internal void GetPortalMessage(out Listing portal)
+        {
+            portal.title = errorTitle.Text;
+            portal.description = errorDescription.Text;
+            portal.tags = errorTags.Text;
+
+            portal.category = "dummy";
+            portal.subcategory = "dummy";
+            portal.startDate = "dummy";
+            portal.endDate = "dummy";
+            portal.serviceType = "dummy";
+            portal.locationType = "dummy";
+            portal.availableDays = "dummy";
+            portal.startTime = "dummy";
+            portal.endTime = "dummy";
+            portal.skillTrade = "dummy";
+            portal.skillExchange = "dummy";
+            portal.credit = "dummy";
+            portal.ActiveOption = "dummy";
+            portal.isClickSaveFirst = "dummy";
+        }
+
+
+        internal string GetSkillTrade(string skillTradeOption)
+        {
+            if (skillTradeOption == "Credit")
+                return actualSkillsTrade.Text;
+            else
+                return actualSkillExchange.Text;
+        }
+        internal string GetMessage()
+        {
+            //Check confirmation message
+            WaitForElement(driver, By.XPath(e_message), 5);
+            return message.Text;
+        }
+        internal string GetDateErrorMessage1()
+        {
+            return errorStartDate2.Text;
+        }
+        internal string GetDateErrorMessage2()
+        {
+            return errorStartDate1.Text;
+        }
+        internal string GetCategoryError()
+        {
+            return errorCategory.Text;
+        }
+        internal string GetSubcategoryError()
+        {
+            return errorSubcategory.Text;
+        }
+        internal string GetSkillExchangeError()
+        {
+            return errorSkillExchangeTags.Text;
+        }
+        internal string GetCredit()
+        {
+            return CreditAmount.Text;
+        }
+        #endregion
     }
 }

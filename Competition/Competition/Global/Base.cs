@@ -33,6 +33,7 @@ namespace Competition.Global
         #region reports
         public static AventStack.ExtentReports.ExtentReports extent;
         public static AventStack.ExtentReports.ExtentTest test;
+
         #endregion
 
         #region setup and tear down
@@ -62,19 +63,19 @@ namespace Competition.Global
             {
 
                 case 1:
-                    GlobalDefinitions.driver = new FirefoxDriver();
+                    driver = new FirefoxDriver();
                     break;
                 case 2:
-                    GlobalDefinitions.driver = new ChromeDriver();
-                    GlobalDefinitions.driver.Manage().Window.Maximize();
+                    driver = new ChromeDriver();
+                    driver.Manage().Window.Maximize();
                     break;
             }
 
             //Load excel into collection
-            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.excelPath, "SignIn");
+            ExcelLib.PopulateInCollection(Base.excelPath, "SignIn");
 
             //Open URL
-            GlobalDefinitions.driver.Navigate().GoToUrl(ExcelLib.ReadData(2, "Url"));
+            driver.Navigate().GoToUrl(ExcelLib.ReadData(2, "Url"));
 
             if (IsLogin == "true")
             {
@@ -136,8 +137,8 @@ namespace Competition.Global
             }
            
             // Close the driver            
-            GlobalDefinitions.driver.Close();
-            GlobalDefinitions.driver.Quit();
+            driver.Close();
+            driver.Quit();
         }
 
         [OneTimeTearDown]
